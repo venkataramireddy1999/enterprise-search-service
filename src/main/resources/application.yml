@@ -1,0 +1,25 @@
+server:
+  port: 8087
+
+spring:
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+
+  sql:
+    init:
+      mode: always
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+jwt:
+  secret: ${JWT_SECRET}
