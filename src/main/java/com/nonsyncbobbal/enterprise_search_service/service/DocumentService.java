@@ -47,7 +47,7 @@ public class DocumentService {
                 sql,
                 saved.getId(),
                 request.getContent(),
-                embedding.toString()
+                embeddingService.toVectorLiteral(embedding)
         );
 
         return saved;

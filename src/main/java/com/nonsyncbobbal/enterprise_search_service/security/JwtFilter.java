@@ -1,5 +1,6 @@
 package com.nonsyncbobbal.enterprise_search_service.security;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -42,22 +44,31 @@ public class JwtFilter extends OncePerRequestFilter {
         String token =
                 authHeader.substring(7);
 
-        String username =
-                jwtService.extractUsername(token);
+        try {
+            String username =
+                    jwtService.extractUsername(token);
 
-        UserDetails userDetails =
-                userDetailsService
-                        .loadUserByUsername(username);
+            UserDetails userDetails =
+                    userDetailsService
+                            .loadUserByUsername(username);
 
-        UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
 
-        SecurityContextHolder.getContext()
-                .setAuthentication(authentication);
+            SecurityContextHolder.getContext()
+                    .setAuthentication(authentication);
+
+        } catch (JwtException | UsernameNotFoundException ex) {
+            // Invalid, expired, or malformed token, or the user it names no
+            // longer exists - leave the request unauthenticated rather than
+            // throwing, so Spring Security responds with 401/403 instead of
+            // this filter causing an uncaught-exception 500.
+            SecurityContextHolder.clearContext();
+        }
 
         filterChain.doFilter(request, response);
     }

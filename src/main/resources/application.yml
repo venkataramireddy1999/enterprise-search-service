@@ -4,9 +4,10 @@ server:
 spring:
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}
+    url: ${POSTGRES_URL}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -19,6 +20,9 @@ spring:
       mode: always
 
   ai:
+    vectorstore:
+      pgvector:
+        initialize-schema: true
     openai:
       api-key: ${OPENAI_API_KEY}
 jwt:

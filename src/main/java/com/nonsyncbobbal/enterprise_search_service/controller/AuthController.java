@@ -4,6 +4,7 @@ import com.nonsyncbobbal.enterprise_search_service.dto.AuthRequest;
 import com.nonsyncbobbal.enterprise_search_service.dto.AuthResponse;
 import com.nonsyncbobbal.enterprise_search_service.dto.RegisterRequest;
 import com.nonsyncbobbal.enterprise_search_service.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(
-            @RequestBody RegisterRequest request
+            @Valid @RequestBody RegisterRequest request
     ) {
 
         authService.register(request);
@@ -33,7 +34,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
-            @RequestBody AuthRequest request
+            @Valid @RequestBody AuthRequest request
     ) {
 
         String token =

@@ -26,6 +26,12 @@ public class AuthService {
 
     public void register(RegisterRequest request) {
 
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new IllegalArgumentException(
+                    "Username is already taken"
+            );
+        }
+
         User user = User.builder()
                 .username(request.getUsername())
                 .password(

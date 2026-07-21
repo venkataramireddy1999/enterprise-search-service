@@ -31,7 +31,7 @@ public class VectorSearchService {
         return jdbcTemplate.queryForList(
                 sql,
                 String.class,
-                embedding.toString()
+                embeddingService.toVectorLiteral(embedding)
         );
     }
 }
